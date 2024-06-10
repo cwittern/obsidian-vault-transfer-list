@@ -93,8 +93,9 @@ export async function transferNote(editor: Editor | null, file: TFile, app: App,
         if (settings.createLink) {
             // Replace original file with link
             const link = createVaultFileLink(fileDisplayName, outputVault);
-            if (editor) editor.setValue(link);
-            else await app.vault.modify(file, link);
+            const content = app.workspace.activeEditor.data + '\n---\nCopied to `'+ outputVault + '`:\n' +link;
+            if (editor) editor.setValue(content);
+            else await app.vault.modify(file, content);
         } else if (settings.deleteOriginal && !recursive) {
             // Delete original file
             app.vault.trash(file, settings.moveToSystemTrash);
